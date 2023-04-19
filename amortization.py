@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 from helium import *
 from amortization_table import amortization_table #see custom file in folder
+from update_current_mortgage_rate import update_mortgage_rates #see custom file in folder
 
 import numpy_financial as npf
 import plotly.express as px
@@ -17,8 +18,17 @@ st.subheader("Lets start by defining the loan parameters:")
 # Load in the most recent mortgage rates from Freddie Mac
 rates = pd.read_parquet('mortgage_rates_FM.parquet')
 
-# When we don't have the updated rates (Theyre refreshed on Thursdays) we can give the option to refresh
-# st.button("It looks like the rates may be out of date. Do you mind if we refresh them?")
+# Check if it has been more than a week since the last update
+last_update = pd.to_datetime(rates['date'].max())
+one_week_ago = pd.to_datetime(dt.date.today() - dt.timedelta(days=7))
+
+# Call function if the rates are outdated and the user wants to
+if last_update <= one_week_ago:
+    # Create a button to update mortgage rates
+    if st.button("Update Mortgage Rates from Freddie Mac? The last pulled rates may be outdated"):
+        update_mortgage_rates()
+        st.success("Mortgage rates updated successfully!")
+
 currentRate30, currentRate15 = rates['30yr'].iloc[-1], rates['15yr'].iloc[-1]
 
 col1, col2, col3 = st.columns(3)
@@ -74,7 +84,7 @@ if is_renting:
     landlord_column1, landlord_column2 = st.columns(2)
     with landlord_column1:
         after_n_months = int(st.number_input('After how many months will you start renting it out?',
-                                             min_value=0,
+                                             min_value=1,
                                              max_value=360,  # or another appropriate maximum value
                                              value=60,
                                              step=1))
