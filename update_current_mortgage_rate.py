@@ -1,7 +1,8 @@
+import datetime as dt
+import pandas as pd
+from helium import *
+
 def update_mortgage_rates():
-    import datetime as dt
-    import pandas as pd
-    from helium import 
     # Define the URL to scrape
     url = 'http://www.freddiemac.com/pmms/'
 
