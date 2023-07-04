@@ -27,6 +27,7 @@ The project is built with Python, and uses the following libraries:
 - numpy_financial
 - helium
 - plotly
+- streamlit
 
 These libraries were chosen for their robust data processing and visualization capabilities.
 
@@ -41,10 +42,6 @@ Contributions are welcome. Please fork the repository and create a pull request 
 ### Credits
 
 This project was created by danmarino1.
-
-### License
-
-Choose a license for your project. You can use [this site](https://choosealicense.com/) to help decide.
 
 ## Dependencies
 
